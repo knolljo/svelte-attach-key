@@ -1,11 +1,11 @@
 import type { Attachment } from "svelte/attachments";
-import { on } from "svelte/events";
 
 interface HotkeyModifiers {
 	ctrl?: boolean;
 	shift?: boolean;
 	alt?: boolean;
 	meta?: boolean;
+	/** Platform-aware modifier: Ctrl on Windows/Linux, Cmd on Mac */
 	mod?: boolean;
 }
 
@@ -17,6 +17,13 @@ interface HotkeyOptions extends HotkeyModifiers {
 	code?: boolean;
 	enabled?: boolean;
 }
+
+const IGNORED_TAGS = new Set(["INPUT", "TEXTAREA", "SELECT"]);
+
+const isMac =
+	typeof navigator !== "undefined" &&
+	/Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
 /**
  * Creates an attachment that triggers an element's click when a hotkey is pressed
  *
@@ -35,6 +42,10 @@ interface HotkeyOptions extends HotkeyModifiers {
  * @example
  * // Use code instead of key (useful for physical layout)
  * <button {@attach hotkey('KeyW', { code: true })} onclick={moveUp}>Move Up</button>
+ *
+ * @example
+ * // Conditionally enabled
+ * <button {@attach enabled && hotkey('k')} onclick={doSomething}>Press K</button>
  */
 export function hotkey(
 	key: string,
@@ -57,16 +68,11 @@ export function hotkey(
 	return (node: HTMLElement) => {
 		if (!enabled) return;
 
-		function handleKeydown(event: Event): void {
-			const e = event as KeyboardEvent;
-			// Check if key matches (case-insensitive)
+		const target = global ? window : node;
+
+		function handleKeydown(e: KeyboardEvent): void {
 			const eventKey = code ? e.code : e.key;
 			if (eventKey.toLowerCase() !== key.toLowerCase()) return;
-
-			// Check modifier keys
-			const isMac =
-				typeof navigator !== "undefined" &&
-				/Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
 			const expectCtrl = ctrl || (mod && !isMac);
 			const expectMeta = meta || (mod && isMac);
@@ -76,27 +82,17 @@ export function hotkey(
 			if (e.altKey !== alt) return;
 			if (e.metaKey !== expectMeta) return;
 
-			// Don't trigger if typing in an input (when ignoreInputs is true)
 			if (ignoreInputs) {
-				const target = e.target as HTMLElement;
-				const tagName = target.tagName;
-				if (
-					tagName === "INPUT" ||
-					tagName === "TEXTAREA" ||
-					tagName === "SELECT" ||
-					target.isContentEditable
-				) {
-					return;
-				}
+				const el = e.target as HTMLElement;
+				if (IGNORED_TAGS.has(el.tagName) || el.isContentEditable) return;
 			}
+
 			if (preventDefault) e.preventDefault();
 			if (stopPropagation) e.stopPropagation();
 			node.click();
 		}
 
-		const target = global ? window : node;
-		const off = on(target, "keydown", handleKeydown);
-
-		return off;
+		target.addEventListener("keydown", handleKeydown);
+		return () => target.removeEventListener("keydown", handleKeydown);
 	};
 }
