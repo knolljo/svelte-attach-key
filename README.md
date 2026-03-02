@@ -17,3 +17,7 @@ Add hotkeys to svelte components.
 ```
 
 For a more advanced example look at the [playground](/playground/src/routes/+page.svelte).
+
+[Demo](https://knolljo.github.io/svelte-attach-key/)
+
+[npm Package](https://www.npmjs.com/package/svelte-attach-key)
