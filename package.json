@@ -10,15 +10,15 @@
     "svelte5"
   ],
   "license": "MIT",
-  "author": "knolljo",
+  "author": "joknoll",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/knolljo/svelte-attach-key.git"
+    "url": "git+https://github.com/joknoll/svelte-attach-key.git"
   },
   "bugs": {
-    "url": "https://github.com/knolljo/svelte-attach-key/issues"
+    "url": "https://github.com/joknoll/svelte-attach-key/issues"
   },
-  "homepage": "https://github.com/knolljo/svelte-attach-key#readme",
+  "homepage": "https://github.com/joknoll/svelte-attach-key#readme",
   "files": [
     "dist"
   ],
