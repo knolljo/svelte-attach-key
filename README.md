@@ -41,16 +41,16 @@ npm install svelte-attach-key
 
 Svelte attachment that triggers the element's `.click()` on the specified keyboard shortcut.
 
-| Option             | Type      | Default | Description                                                   |
-|--------------------|-----------|---------|---------------------------------------------------------------|
-| `ctrl`             | `boolean` | `false` | Require Ctrl key                                              |
-| `shift`            | `boolean` | `false` | Require Shift key                                             |
-| `alt`              | `boolean` | `false` | Require Alt key                                               |
-| `meta`             | `boolean` | `false` | Require Meta key (Cmd on Mac)                                 |
-| `mod`              | `boolean` | `false` | Platform-aware: Ctrl on Windows/Linux, Cmd on Mac             |
-| `global`           | `boolean` | `true`  | Listen on `window`; `false` to scope to element focus         |
-| `preventDefault`   | `boolean` | `true`  | Call `e.preventDefault()` on match                            |
-| `stopPropagation`  | `boolean` | `false` | Call `e.stopPropagation()` on match                           |
-| `ignoreInputs`     | `boolean` | `true`  | Skip when event originates from inputs or contenteditable     |
-| `code`             | `boolean` | `false` | Match `e.code` instead of `e.key` (physical key layout)       |
-| `enabled`          | `boolean` | `true`  | Whether the attachment is active                              |
+| Option            | Type      | Default | Description                                               |
+| ----------------- | --------- | ------- | --------------------------------------------------------- |
+| `ctrl`            | `boolean` | `false` | Require Ctrl key                                          |
+| `shift`           | `boolean` | `false` | Require Shift key                                         |
+| `alt`             | `boolean` | `false` | Require Alt key                                           |
+| `meta`            | `boolean` | `false` | Require Meta key (Cmd on Mac)                             |
+| `mod`             | `boolean` | `false` | Platform-aware: Ctrl on Windows/Linux, Cmd on Mac         |
+| `global`          | `boolean` | `true`  | Listen on `window`; `false` to scope to element focus     |
+| `preventDefault`  | `boolean` | `true`  | Call `e.preventDefault()` on match                        |
+| `stopPropagation` | `boolean` | `false` | Call `e.stopPropagation()` on match                       |
+| `ignoreInputs`    | `boolean` | `true`  | Skip when event originates from inputs or contenteditable |
+| `code`            | `boolean` | `false` | Match `e.code` instead of `e.key` (physical key layout)   |
+| `enabled`         | `boolean` | `true`  | Whether the attachment is active                          |

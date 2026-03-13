@@ -9,16 +9,16 @@
     "svelte",
     "svelte5"
   ],
+  "homepage": "https://github.com/joknoll/svelte-attach-key#readme",
+  "bugs": {
+    "url": "https://github.com/joknoll/svelte-attach-key/issues"
+  },
   "license": "MIT",
   "author": "joknoll",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joknoll/svelte-attach-key.git"
   },
-  "bugs": {
-    "url": "https://github.com/joknoll/svelte-attach-key/issues"
-  },
-  "homepage": "https://github.com/joknoll/svelte-attach-key#readme",
   "files": [
     "dist"
   ],

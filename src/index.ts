@@ -1,28 +1,26 @@
 import type { Attachment } from "svelte/attachments";
 
 interface HotkeyModifiers {
-	ctrl?: boolean;
-	shift?: boolean;
-	alt?: boolean;
-	meta?: boolean;
-	/** Platform-aware modifier: Ctrl on Windows/Linux, Cmd on Mac */
-	mod?: boolean;
+  ctrl?: boolean;
+  shift?: boolean;
+  alt?: boolean;
+  meta?: boolean;
+  /** Platform-aware modifier: Ctrl on Windows/Linux, Cmd on Mac */
+  mod?: boolean;
 }
 
 interface HotkeyOptions extends HotkeyModifiers {
-	global?: boolean;
-	preventDefault?: boolean;
-	stopPropagation?: boolean;
-	ignoreInputs?: boolean;
-	code?: boolean;
-	enabled?: boolean;
+  global?: boolean;
+  preventDefault?: boolean;
+  stopPropagation?: boolean;
+  ignoreInputs?: boolean;
+  code?: boolean;
+  enabled?: boolean;
 }
 
 const IGNORED_TAGS = new Set(["INPUT", "TEXTAREA", "SELECT"]);
 
-const isMac =
-	typeof navigator !== "undefined" &&
-	/Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+const isMac = typeof navigator !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
 
 /**
  * Creates an attachment that triggers an element's click when a hotkey is pressed
@@ -47,52 +45,49 @@ const isMac =
  * // Conditionally enabled
  * <button {@attach enabled && hotkey('k')} onclick={doSomething}>Press K</button>
  */
-export function hotkey(
-	key: string,
-	options: HotkeyOptions = {},
-): Attachment<HTMLElement> {
-	const {
-		ctrl = false,
-		shift = false,
-		alt = false,
-		meta = false,
-		mod = false,
-		global = true,
-		preventDefault = true,
-		stopPropagation = false,
-		ignoreInputs = true,
-		code = false,
-		enabled = true,
-	} = options;
+export function hotkey(key: string, options: HotkeyOptions = {}): Attachment<HTMLElement> {
+  const {
+    ctrl = false,
+    shift = false,
+    alt = false,
+    meta = false,
+    mod = false,
+    global = true,
+    preventDefault = true,
+    stopPropagation = false,
+    ignoreInputs = true,
+    code = false,
+    enabled = true,
+  } = options;
 
-	return (node: HTMLElement) => {
-		if (!enabled) return;
+  return (node: HTMLElement) => {
+    if (!enabled) return;
 
-		const target = global ? window : node;
+    const target = global ? window : node;
 
-		function handleKeydown(e: KeyboardEvent): void {
-			const eventKey = code ? e.code : e.key;
-			if (eventKey.toLowerCase() !== key.toLowerCase()) return;
+    function handleKeydown(e: KeyboardEvent): void {
+      const eventKey = code ? e.code : e.key;
+      if (eventKey.toLowerCase() !== key.toLowerCase()) return;
 
-			const expectCtrl = ctrl || (mod && !isMac);
-			const expectMeta = meta || (mod && isMac);
+      const expectCtrl = ctrl || (mod && !isMac);
+      const expectMeta = meta || (mod && isMac);
 
-			if (e.ctrlKey !== expectCtrl) return;
-			if (e.shiftKey !== shift) return;
-			if (e.altKey !== alt) return;
-			if (e.metaKey !== expectMeta) return;
+      if (e.ctrlKey !== expectCtrl) return;
+      if (e.shiftKey !== shift) return;
+      if (e.altKey !== alt) return;
+      if (e.metaKey !== expectMeta) return;
 
-			if (ignoreInputs) {
-				const el = e.target as HTMLElement;
-				if (IGNORED_TAGS.has(el.tagName) || el.isContentEditable) return;
-			}
+      if (ignoreInputs) {
+        const el = e.target as HTMLElement;
+        if (IGNORED_TAGS.has(el.tagName) || el.isContentEditable) return;
+      }
 
-			if (preventDefault) e.preventDefault();
-			if (stopPropagation) e.stopPropagation();
-			node.click();
-		}
+      if (preventDefault) e.preventDefault();
+      if (stopPropagation) e.stopPropagation();
+      node.click();
+    }
 
-		target.addEventListener("keydown", handleKeydown);
-		return () => target.removeEventListener("keydown", handleKeydown);
-	};
+    target.addEventListener("keydown", handleKeydown);
+    return () => target.removeEventListener("keydown", handleKeydown);
+  };
 }
